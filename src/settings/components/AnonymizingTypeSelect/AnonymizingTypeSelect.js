@@ -20,6 +20,8 @@ const AnonymizingTypeSelect = ({ name, types }) => {
           component={RadioButton}
           label={type.label}
           name={`closingType.${name}`}
+          {...(type.disabled ? { disabled: true } : {})}
+          {...(type.initialValue ? { initialValue: type.initialValue } : {})}
           type="radio"
           id={`${type.value}-${name}-radio-button`}
           value={type.value}

@@ -12,6 +12,10 @@ const cleanInterval = (data) => {
   const newData = cloneDeep(data);
 
   forEach(data.closingType, (value, key) => {
+    if (key === 'userSpecific') {
+      return;
+    }
+
     if (isString(value) && value !== closingTypesMap.INTERVAL) {
       set(newData, key, {});
     } else if (isArray(value)) {

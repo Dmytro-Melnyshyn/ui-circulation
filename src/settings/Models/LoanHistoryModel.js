@@ -15,6 +15,7 @@ export default class LoanHistory {
       feeFine = {},
       loanExceptions = [],
       treatEnabled = false,
+      userSpecific = {},
     } = data;
 
     this.closingType = closingType;
@@ -28,6 +29,10 @@ export default class LoanHistory {
     };
     this.loanExceptions = loanExceptions;
     this.treatEnabled = treatEnabled;
+    this.userSpecific = {
+      duration: userSpecific.duration,
+      intervalId: userSpecific.intervalId,
+    };
   }
 
   isClosingTypeIntervalSelected(item) {

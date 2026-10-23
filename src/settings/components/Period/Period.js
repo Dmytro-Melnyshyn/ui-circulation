@@ -42,6 +42,7 @@ class Period extends PureComponent {
     selectPlaceholder: PropTypes.string,
     changeFormValue: PropTypes.func,
     intervalPeriodsSuffix: PropTypes.string,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -53,6 +54,7 @@ class Period extends PureComponent {
     selectPlaceholder: '',
     changeFormValue: noop,
     intervalPeriodsSuffix: '',
+    disabled: false,
   };
 
   onInputClear = () => {
@@ -76,6 +78,7 @@ class Period extends PureComponent {
       inputSize,
       selectSize,
       intervalPeriodsSuffix,
+      disabled,
       intl: {
         formatMessage,
       }
@@ -112,6 +115,7 @@ class Period extends PureComponent {
                 onClearField={this.onInputClear}
                 parse={transformInputValue}
                 placeholder={inputPlaceholder}
+                {...(disabled ? { disabled: true } : {})}
               />
             </div>
           </Col>
@@ -126,6 +130,7 @@ class Period extends PureComponent {
                 component={Select}
                 required={required}
                 placeholder={isEmpty(selectPlaceholder) ? '' : formatMessage({ id: selectPlaceholder })}
+                {...(disabled ? { disabled: true } : {})}
               >
                 {intervalPeriods}
               </Field>

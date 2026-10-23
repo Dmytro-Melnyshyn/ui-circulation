@@ -18,9 +18,15 @@ import {
 
 import css from './AnonymizingTypeSelectContainer.css';
 
-export const afterCloseTranslationKey = (name) => (name === closedLoansRules.WITH_FEES_FINES
-  ? 'ui-circulation.settings.loanHistory.afterCloseOrSuspended'
-  : 'ui-circulation.settings.loanHistory.afterClose');
+export const afterCloseTranslationKey = (name) => {
+  if (name === 'userSpecific') {
+    return 'ui-circulation.settings.loanHistory.userSpecificAfterClose';
+  }
+
+  return name === closedLoansRules.WITH_FEES_FINES
+    ? 'ui-circulation.settings.loanHistory.afterCloseOrSuspended'
+    : 'ui-circulation.settings.loanHistory.afterClose';
+};
 
 class AnonymizingTypeSelectContainer extends Component {
   static propTypes = {
@@ -32,6 +38,11 @@ class AnonymizingTypeSelectContainer extends Component {
     types: PropTypes.arrayOf(PropTypes.shape({
       value: PropTypes.string,
     })).isRequired,
+    disabled: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    disabled: false,
   }
 
   constructor(props) {
@@ -41,7 +52,7 @@ class AnonymizingTypeSelectContainer extends Component {
     this.selectedPeriods = intervalPeriods.filter(period => anonymizingIntervals.includes(period.value));
   }
 
-  renderPeriod(name, path) {
+  renderPeriod(name, path, disabled) {
     return (
       <div
         data-testid="period"
@@ -54,6 +65,7 @@ class AnonymizingTypeSelectContainer extends Component {
           intervalPeriods={this.generateOptions(this.selectedPeriods, 'ui-circulation.settings.loanHistory.selectInterval')}
           inputSize={4}
           selectSize={7}
+          disabled={disabled}
         />
         <FormattedMessage
           tagName="div"
@@ -65,22 +77,26 @@ class AnonymizingTypeSelectContainer extends Component {
   }
 
   getClosingTypes(name, path) {
+    const { disabled } = this.props;
+
     return this.props.types.map(type => {
-      if (type.value !== closingTypesMap.INTERVAL) {
+      if (type.value === closingTypesMap.INTERVAL) {
         return {
           ...type,
-          label: (
-            <FormattedMessage
-              id={type.label}
-              values={{ name: <FormattedMessage id={`ui-circulation.settings.loanHistory.${name}`} /> }}
-            />
-          ),
+          label: this.renderPeriod(name, path, disabled),
+          disabled,
         };
       }
 
       return {
-        label: this.renderPeriod(name, path),
-        value: closingTypesMap.INTERVAL,
+        ...type,
+        label: type.noName ? <FormattedMessage id={type.label} /> : (
+          <FormattedMessage
+            id={type.label}
+            values={{ name: <FormattedMessage id={`ui-circulation.settings.loanHistory.${name}`} /> }}
+          />
+        ),
+        disabled: disabled && type.value !== 'disabled',
       };
     });
   }

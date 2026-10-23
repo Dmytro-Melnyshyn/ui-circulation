@@ -446,6 +446,32 @@ export const closedLoansRules = {
   WITH_FEES_FINES: 'feeFine',
 };
 
+export const userSpecificClosingTypesMap = {
+  DISABLED: 'disabled',
+};
+
+export const userSpecificClosingTypes = [
+  {
+    value: userSpecificClosingTypesMap.DISABLED,
+    label: 'ui-circulation.settings.loanHistory.doNotAllowUserSpecific',
+    noName: true,
+    initialValue: userSpecificClosingTypesMap.DISABLED,
+  },
+  {
+    value: closingTypesMap.IMMEDIATELY,
+    label: 'ui-circulation.settings.loanHistory.userSpecificImmediatelyAfterClose',
+    noName: true,
+  },
+  {
+    value: closingTypesMap.INTERVAL,
+    label: 'ui-circulation.settings.loanHistory.userSpecificInterval',
+    noName: true,
+  },
+];
+
+// Alias kept in the style used by the existing fee/fine closing types.
+export const USER_SPECIFIC_CLOSING_TYPES = userSpecificClosingTypes;
+
 export const timeUnits = [
   {
     value: timeUnitsMap.MINUTE,

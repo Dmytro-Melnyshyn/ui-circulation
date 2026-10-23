@@ -38,14 +38,19 @@ export const getInitialValues = (settings) => {
 };
 
 export const normalizeData = (value) => {
-  const { closingType, loan, feeFine, loanExceptions, treatEnabled } = normalize(value);
+  const { closingType, loan, feeFine, userSpecific, loanExceptions, treatEnabled } = normalize(value);
   const loanHistorySettings = {
     closingType: cloneDeep(closingType),
     loan,
     feeFine,
+    userSpecific,
     loanExceptions,
     treatEnabled
   };
+
+  if (Object.prototype.hasOwnProperty.call(value || {}, 'userSpecific') || userSpecific !== undefined) {
+    loanHistorySettings.userSpecific = userSpecific;
+  }
 
   loanHistorySettings.closingType.feeFine = treatEnabled
     ? loanHistorySettings.closingType.feeFine
