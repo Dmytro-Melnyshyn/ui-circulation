@@ -115,6 +115,25 @@ class RenewalsSection extends React.Component {
               type="checkbox"
             />
           </div>}
+        { policy.isRenewable() &&
+          <div data-testid="automaticRenewal">
+            <Field
+              label={
+                <>
+                  <FormattedMessage id="ui-circulation.settings.loanPolicy.automaticRenewals" />
+                  <InfoPopover
+                    content={<FormattedMessage id="ui-circulation.settings.loanPolicy.automaticRenewals.infoPopover" />}
+                    iconSize="medium"
+                  />
+                </>
+              }
+              name="renewalsPolicy.automaticRenewal"
+              id="renewalsPolicy.automaticRenewal"
+              component={Checkbox}
+              type="checkbox"
+              onChange={this.handleAutomaticRenewalsChange}
+            />
+          </div>}
         { policy.isRenewable() && !policy.isUnlimitedRenewals() &&
           <>
             <div
@@ -192,25 +211,6 @@ class RenewalsSection extends React.Component {
             >
               {schedules}
             </Field>
-          </div>}
-        { policy.isRenewable() &&
-          <div data-testid="automaticRenewal">
-            <Field
-              label={
-                <>
-                  <FormattedMessage id="ui-circulation.settings.loanPolicy.automaticRenewals" />
-                  <InfoPopover
-                    content={<FormattedMessage id="ui-circulation.settings.loanPolicy.automaticRenewals.infoPopover" />}
-                    iconSize="medium"
-                  />
-                </>
-              }
-              name="renewalsPolicy.automaticRenewal"
-              id="renewalsPolicy.automaticRenewal"
-              component={Checkbox}
-              type="checkbox"
-              onChange={this.handleAutomaticRenewalsChange}
-            />
           </div>}
         { policy.isAutomaticRenewals() &&
           <>

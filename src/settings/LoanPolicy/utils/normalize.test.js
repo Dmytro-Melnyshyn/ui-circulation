@@ -3,6 +3,7 @@ import {
   checkFixedProfile,
   checkUnlimitedRenewals,
   checkDifferentRenewalPeriod,
+  checkAutomaticRenewals,
   checkOpeningTimeOffset,
   checkLoanable,
   checkRenewable,
@@ -179,6 +180,43 @@ describe('LoanPolicy/utils functions', () => {
       };
 
       expect(checkDifferentRenewalPeriod(dataForTest)).toEqual(dataForTest);
+    });
+  });
+
+  describe('checkAutomaticRenewals', () => {
+    it('should remove automatic renewal fields when automatic renewals are disabled', () => {
+      const policy = {
+        renewalsPolicy: {
+          automaticRenewal: false,
+          attemptFirstRenewal: 'onDueDate',
+          daysBefore: 3,
+          automaticRenewalRetryPeriodInDays: 2,
+        },
+      };
+
+      expect(checkAutomaticRenewals(policy)).toEqual({
+        renewalsPolicy: {
+          automaticRenewal: false,
+        },
+      });
+    });
+
+    it('should normalize a blank retry period to zero', () => {
+      const policy = {
+        renewalsPolicy: {
+          automaticRenewal: true,
+          attemptFirstRenewal: 'onDueDate',
+          automaticRenewalRetryPeriodInDays: '',
+        },
+      };
+
+      expect(checkAutomaticRenewals(policy)).toEqual({
+        renewalsPolicy: {
+          automaticRenewal: true,
+          automaticRenewalRetryPeriodInDays: 0,
+          firstAutomaticRenewalAttemptDaysBeforeDueDate: 0,
+        },
+      });
     });
   });
 
