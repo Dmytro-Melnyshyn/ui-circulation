@@ -55,11 +55,11 @@ describe('RenewalsSection', () => {
   const fieldCallOrderByPlace = {
     renewable: 1,
     unlimitedRenewals: 2,
-    numRenewalsAllowed: 3,
-    renewFrom: 4,
-    renewalPeriodDifferent: 5,
-    altFDDS: 6,
-    automaticRenewal: 7,
+    automaticRenewal: 3,
+    numRenewalsAllowed: 4,
+    renewFrom: 5,
+    renewalPeriodDifferent: 6,
+    altFDDS: 7,
   };
   const mockedPolicy = {
     isProfileRolling: () => true,

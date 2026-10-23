@@ -83,9 +83,13 @@ export const checkAutomaticRenewals = (policy) => {
   } else {
     const attemptFirstRenewal = get(loanPolicy, 'renewalsPolicy.attemptFirstRenewal');
     const daysBefore = get(loanPolicy, 'renewalsPolicy.daysBefore');
+    const additionalRetries = get(loanPolicy, 'renewalsPolicy.automaticRenewalRetryPeriodInDays');
 
     loanPolicy.renewalsPolicy.firstAutomaticRenewalAttemptDaysBeforeDueDate =
       attemptFirstRenewal === ATTEMPT_DAYS_BEFORE ? daysBefore : 0;
+    if (additionalRetries === '' || additionalRetries === undefined || additionalRetries === null) {
+      loanPolicy.renewalsPolicy.automaticRenewalRetryPeriodInDays = 0;
+    }
 
     unset(loanPolicy, 'renewalsPolicy.attemptFirstRenewal');
     unset(loanPolicy, 'renewalsPolicy.daysBefore');
