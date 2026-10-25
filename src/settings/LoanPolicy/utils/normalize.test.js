@@ -3,6 +3,7 @@ import {
   checkFixedProfile,
   checkUnlimitedRenewals,
   checkDifferentRenewalPeriod,
+  checkAutomaticRenewals,
   checkOpeningTimeOffset,
   checkLoanable,
   checkRenewable,
@@ -179,6 +180,56 @@ describe('LoanPolicy/utils functions', () => {
       };
 
       expect(checkDifferentRenewalPeriod(dataForTest)).toEqual(dataForTest);
+    });
+  });
+
+  describe('checkAutomaticRenewals', () => {
+    it.each([
+      ['an empty string', ''],
+      ['undefined', undefined],
+      ['null', null],
+    ])('normalizes %s retry period to zero when automatic renewals are enabled', (_, retryPeriod) => {
+      const policy = {
+        renewalsPolicy: {
+          automaticRenewal: true,
+          automaticRenewalRetryPeriodInDays: retryPeriod,
+        },
+      };
+
+      expect(checkAutomaticRenewals(policy)).toEqual({
+        renewalsPolicy: {
+          automaticRenewal: true,
+          automaticRenewalRetryPeriodInDays: 0,
+          firstAutomaticRenewalAttemptDaysBeforeDueDate: 0,
+        },
+      });
+    });
+
+    it('keeps a retry period value unchanged when automatic renewals are enabled', () => {
+      const policy = {
+        renewalsPolicy: {
+          automaticRenewal: true,
+          automaticRenewalRetryPeriodInDays: 3,
+        },
+      };
+
+      expect(checkAutomaticRenewals(policy)).toEqual({
+        renewalsPolicy: {
+          automaticRenewal: true,
+          automaticRenewalRetryPeriodInDays: 3,
+          firstAutomaticRenewalAttemptDaysBeforeDueDate: 0,
+        },
+      });
+    });
+
+    it('does not add automatic renewal fields when automatic renewals are disabled', () => {
+      const policy = {
+        renewalsPolicy: {
+          automaticRenewal: false,
+        },
+      };
+
+      expect(checkAutomaticRenewals(policy)).toEqual(policy);
     });
   });
 
